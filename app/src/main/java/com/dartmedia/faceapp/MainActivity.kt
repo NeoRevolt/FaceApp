@@ -14,6 +14,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.dartmedia.faceapp.databinding.ActivityMainBinding
+import com.dartmedia.faceappsdk.FaceVerification
+import com.dartmedia.faceappsdk.remote.Status
 import com.google.android.material.snackbar.Snackbar
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var faceVerification: FaceVerification
 
     private var imgFile1: File? = null
 
@@ -41,6 +44,35 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
             if (uriImage != null) {
                 imgFile1 = File(getRealPathFromUri(uriImage))
+            }
+        }
+    }
+
+    private val galleryResultLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uriImage = result.data?.data
+
+            binding.image2.setImageURI(uriImage)
+
+            if (uriImage != null) {
+                val imgFile2 = File(getRealPathFromUri(uriImage))
+                when(faceVerification.verify(imgFile1!!, imgFile2)){
+                    Status.VALID -> {
+                        Log.d("SDK","VALID")
+                    }
+                    Status.LOADING -> {
+                        Log.d("SDK","LOADING")
+                    }
+                    Status.FAILED -> {
+                        Log.d("SDK","FAILED")
+                    }
+                    Status.INVALID -> {
+                        Log.d("SDK","INVALID")
+                    }
+                }
+
+                Log.d("SIZE 1", imgFile1!!.length().toString())
+                Log.d("SIZE 2", imgFile2.length().toString())
             }
         }
     }
@@ -58,6 +90,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        faceVerification = FaceVerification()
         selectImage()
         openCamera()
     }
@@ -104,7 +137,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
 
             if (EasyPermissions.hasPermissions(this@MainActivity, *permissions)) {
-                intentToCameraActivity()
+//                intentToCameraActivity()
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                galleryResultLauncher2.launch(intent)
             } else {
                 EasyPermissions.requestPermissions(this@MainActivity, "Izinkan aplikasi mengakses camera?", RC_CAMERA, *permissions)
             }
@@ -124,7 +160,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         val intent = Intent(this@MainActivity, CameraActivity::class.java)
-        intent.type = "image/*"
+        intent.putExtra("image1",imgFile1!!.absolutePath)
         cameraResultLauncher.launch(intent)
     }
 

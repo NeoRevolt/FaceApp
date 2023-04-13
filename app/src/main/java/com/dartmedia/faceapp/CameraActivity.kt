@@ -15,7 +15,10 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.dartmedia.faceapp.databinding.ActivityCameraBinding
+import com.dartmedia.faceappsdk.FaceVerification
+import com.dartmedia.faceappsdk.remote.Status
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -27,6 +30,7 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCameraBinding
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var faceVerification: FaceVerification
 
     private var imageCapture: ImageCapture? = null
 
@@ -37,6 +41,7 @@ class CameraActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         cameraExecutor = Executors.newSingleThreadExecutor()
+        faceVerification = FaceVerification()
 
         startCamera()
         binding.imgCaptureBtn.setOnClickListener { capturePhoto() }
@@ -80,7 +85,7 @@ class CameraActivity : AppCompatActivity() {
 
         }, ContextCompat.getMainExecutor(this@CameraActivity))
 
-        getOrientationCamera()
+//        getOrientationCamera()
     }
 
     private fun capturePhoto() {
@@ -100,20 +105,40 @@ class CameraActivity : AppCompatActivity() {
                 val rotatedImgBitmap = Bitmap.createBitmap(imgBitmap, 0, 0, imgBitmap.width, imgBitmap.height, matrix, true)
 
                 //save normal image bitmap to file
-                val filePath = Utils.tempFileImage(this@CameraActivity, rotatedImgBitmap, filename)
+                val filePath = File(Utils.tempFileImage(this@CameraActivity, rotatedImgBitmap, filename))
+                val filePath2 = File(intent.getStringExtra("image1"))
 
-                runBlocking {
                     //Panggil API
+                when(faceVerification.verify(filePath, filePath2)){
+                    Status.VALID -> {
+                        Log.d("SDK","VALID")
+                        val intent = Intent()
+                        intent.putExtra("path", filePath)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    }
+                    Status.LOADING -> {
+                        Log.d("SDK","LOADING")
+                    }
+                    Status.FAILED -> {
+                        Log.d("SDK","FAILED")
+                        recreate()
+                    }
+                    Status.INVALID -> {
+                        Log.d("SDK","INVALID")
+                        recreate()
+                    }
+                }
 
+//                val intent = Intent()
+//                intent.putExtra("path", filePath.absolutePath)
+//                setResult(Activity.RESULT_OK, intent)
+//                finish()
                     //If condition result true will intent to the main activity
 
                     //If condition result false will retake photo
-                }
 
-                val intent = Intent()
-                intent.putExtra("path", filePath)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+
 
                 image.close()
             }
