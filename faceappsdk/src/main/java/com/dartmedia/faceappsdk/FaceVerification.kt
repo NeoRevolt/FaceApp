@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-private var isValid: Status = Status.LOADING
+private var isValid: Status = Status.DEFAULT
 
 class FaceVerification {
 

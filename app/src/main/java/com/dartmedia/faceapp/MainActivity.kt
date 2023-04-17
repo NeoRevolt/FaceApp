@@ -137,10 +137,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
 
             if (EasyPermissions.hasPermissions(this@MainActivity, *permissions)) {
-//                intentToCameraActivity()
+                intentToCameraActivity()
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = "image/*"
-                galleryResultLauncher2.launch(intent)
+                //galleryResultLauncher2.launch(intent)
             } else {
                 EasyPermissions.requestPermissions(this@MainActivity, "Izinkan aplikasi mengakses camera?", RC_CAMERA, *permissions)
             }

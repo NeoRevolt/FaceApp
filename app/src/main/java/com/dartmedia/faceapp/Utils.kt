@@ -17,7 +17,7 @@ object Utils {
         val os: OutputStream
         try {
             os = FileOutputStream(imageFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100, os)
+            bitmap.compress(Bitmap.CompressFormat.JPEG,15, os)
             os.flush()
             os.close()
         } catch (e: Exception) {
