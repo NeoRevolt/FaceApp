@@ -2,7 +2,7 @@ package com.dartmedia.faceappsdk.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class VerifyResponse2(
+data class VerifyResponseModel(
 
 	@field:SerializedName("result")
 	val result: Result,

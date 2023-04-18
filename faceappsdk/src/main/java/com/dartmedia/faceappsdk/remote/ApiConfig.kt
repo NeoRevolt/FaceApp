@@ -1,6 +1,7 @@
 package com.dartmedia.faceappsdk.remote
 
 import com.dartmedia.faceappsdk.BuildConfig
+import com.dartmedia.faceappsdk.utils.Const
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,7 +24,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://60bf-182-253-152-70.ngrok-free.app/")
+                .baseUrl(Const.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

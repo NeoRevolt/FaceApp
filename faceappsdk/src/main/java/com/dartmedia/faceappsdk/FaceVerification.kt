@@ -2,9 +2,8 @@ package com.dartmedia.faceappsdk
 
 import android.util.Log
 import com.dartmedia.faceappsdk.remote.ApiConfig
-import com.dartmedia.faceappsdk.remote.response.VerifyResponse
 import com.dartmedia.faceappsdk.remote.Status
-import com.dartmedia.faceappsdk.remote.response.VerifyResponse2
+import com.dartmedia.faceappsdk.remote.response.VerifyResponseModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -17,11 +16,10 @@ private var isValid: Status = Status.DEFAULT
 
 class FaceVerification {
 
-    fun verify(image1: File, image2: File) : Status {
+    fun verify(image1: File, image2: File): Status {
         isValid = Status.LOADING
         val requestImageFile1 = image1.asRequestBody("image/*".toMediaTypeOrNull())
         val requestImageFile2 = image2.asRequestBody("image/*".toMediaTypeOrNull())
-
         val imageMultipart1: MultipartBody.Part = MultipartBody.Part.createFormData(
             "file1",
             image1.name,
@@ -32,34 +30,28 @@ class FaceVerification {
             image1.name,
             requestImageFile2
         )
-
         val service = ApiConfig.getApiService().verifyImage(imageMultipart1, imageMultipart2)
-
-        service.enqueue(object : Callback<VerifyResponse2> {
+        service.enqueue(object : Callback<VerifyResponseModel> {
             override fun onResponse(
-                call: Call<VerifyResponse2>,
-                response: Response<VerifyResponse2>
+                call: Call<VerifyResponseModel>,
+                response: Response<VerifyResponseModel>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val responseBody = response.body()
                     val distance = responseBody?.result?.distance as Double
-                    if (distance < 0.3){
+                    if (distance < 0.3) {
                         isValid = Status.VALID
                         Log.d("FACE SDK", responseBody.result.toString())
-                    }
-                    else {
+                    } else {
                         isValid = Status.INVALID
                         Log.d("FACE SDK", "BEDA")
                     }
-                }
-                else {
+                } else {
                     isValid = Status.INVALID
                     Log.d("FACE SDK", "INVALID")
-
                 }
             }
-
-            override fun onFailure(call: Call<VerifyResponse2>, t: Throwable) {
+            override fun onFailure(call: Call<VerifyResponseModel>, t: Throwable) {
                 isValid = Status.FAILED
                 Log.d("FACE SDK", "$t")
             }
@@ -69,11 +61,10 @@ class FaceVerification {
 
 
     // Warning: Synchronous Call (handled with try-catch)
-    fun verifySync(image1: File, image2: File) : Status {
+    fun verifySync(image1: File, image2: File): Status {
         isValid = Status.LOADING
         val requestImageFile1 = image1.asRequestBody("image/*".toMediaTypeOrNull())
         val requestImageFile2 = image2.asRequestBody("image/*".toMediaTypeOrNull())
-
         val imageMultipart1: MultipartBody.Part = MultipartBody.Part.createFormData(
             "file1",
             image1.name,
@@ -84,30 +75,25 @@ class FaceVerification {
             image1.name,
             requestImageFile2
         )
-
         val service = ApiConfig.getApiService().verifyImage(imageMultipart1, imageMultipart2)
-
         try {
             val response = service.execute()
-            if (response.isSuccessful){
+            if (response.isSuccessful) {
                 Log.d("SDK", "SYNC")
                 val responseBody = response.body()
                 val distance = responseBody?.result?.distance as Double
-                if (distance < 0.3){
+                if (distance < 0.3) {
                     isValid = Status.VALID
                     Log.d("SDK", responseBody.result.toString())
-                }
-                else {
+                } else {
                     isValid = Status.INVALID
                     Log.d("SDK", "BEDA")
                 }
-            }
-            else{
+            } else {
                 isValid = Status.INVALID
                 Log.d("SDK", "INVALID")
             }
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("SDK", "$e")
         }
         return isValid
