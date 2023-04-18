@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
+
+apply plugin: 'maven-publish'
 
 android {
     namespace 'com.dartmedia.faceappsdk'
@@ -10,7 +13,8 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
-
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -27,6 +31,45 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+afterEvaluate {
+    def githubProperties = new Properties()
+    githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+    publishing {
+        publications{
+            release(MavenPublication){
+                from components.release
+
+                groupId 'com.github.neorevolt'
+                artifactId 'face-sdk'
+                version '1.0.0'
+            }
+            debug(MavenPublication) {
+                from components.debug
+
+                groupId 'com.github.neorevolt'
+                artifactId 'face-sdk'
+                version '1.0.0'
+            }
+        }
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/NeoRevolt/FaceApp")
+
+                credentials {
+                    username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                    password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+                }
+            }
+        }
     }
 }
 
