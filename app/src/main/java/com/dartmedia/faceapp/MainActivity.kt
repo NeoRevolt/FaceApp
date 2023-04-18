@@ -3,6 +3,7 @@ package com.dartmedia.faceapp
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -43,7 +44,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             binding.image.setImageURI(uriImage)
 
             if (uriImage != null) {
-                imgFile1 = File(getRealPathFromUri(uriImage))
+                //Compress Image
+                val bitmapImage = BitmapFactory.decodeFile(getRealPathFromUri(uriImage))
+                val newFile = Utils.tempFileImage(this, bitmapImage, System.currentTimeMillis().toString())
+                imgFile1 = File(newFile!!)
             }
         }
     }
@@ -55,8 +59,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             binding.image2.setImageURI(uriImage)
 
             if (uriImage != null) {
-                val imgFile2 = File(getRealPathFromUri(uriImage))
-                when(faceVerification.verify(imgFile1!!, imgFile2)){
+                //Compress Image
+                val bitmapImage = BitmapFactory.decodeFile(getRealPathFromUri(uriImage))
+                val newFile = Utils.tempFileImage(this, bitmapImage, System.currentTimeMillis().toString())
+                val imgFile2 = File(newFile!!)
+                when(faceVerification.verifySync(imgFile1!!, imgFile2)){
                     Status.VALID -> {
                         Log.d("SDK","VALID")
                     }

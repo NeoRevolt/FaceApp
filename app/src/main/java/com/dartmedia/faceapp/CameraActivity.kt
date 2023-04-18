@@ -90,7 +90,6 @@ class CameraActivity : AppCompatActivity() {
 
     private fun capturePhoto() {
         val imageCapture = imageCapture ?: return
-
         imageCapture.takePicture(cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
                 super.onCaptureSuccess(image)
@@ -109,11 +108,11 @@ class CameraActivity : AppCompatActivity() {
                 val filePath2 = File(intent.getStringExtra("image1"))
 
                     //Panggil API
-                when(faceVerification.verify(filePath, filePath2)){
+                when(faceVerification.verifySync(filePath, filePath2)){
                     Status.VALID -> {
                         Log.d("SDK","VALID")
                         val intent = Intent()
-                        intent.putExtra("path", filePath)
+                        intent.putExtra("path", filePath.absolutePath)
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
@@ -122,11 +121,11 @@ class CameraActivity : AppCompatActivity() {
                     }
                     Status.FAILED -> {
                         Log.d("SDK","FAILED")
-                        recreate()
+                        startCamera()
                     }
                     Status.INVALID -> {
                         Log.d("SDK","INVALID")
-                        recreate()
+                        startCamera()
                     }
                 }
 
