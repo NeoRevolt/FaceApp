@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -6,10 +8,19 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/NeoRevolt/FaceApp")
+            credentials {
+                username = 'NeoRevolt'
+                password = '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'
+            }
+        }
     }
 }
 rootProject.name = "FaceApp"
