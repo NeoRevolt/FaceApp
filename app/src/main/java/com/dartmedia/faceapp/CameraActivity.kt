@@ -110,22 +110,25 @@ class CameraActivity : AppCompatActivity() {
                     //Panggil API
                 when(faceVerification.verifySync(filePath, filePath2)){
                     Status.VALID -> {
-                        Log.d("SDK","VALID")
+                        Toast.makeText(this@CameraActivity, "Valid", Toast.LENGTH_SHORT).show()
                         val intent = Intent()
                         intent.putExtra("path", filePath.absolutePath)
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
                     Status.LOADING -> {
-                        Log.d("SDK","LOADING")
+                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
+                        Log.d("CAMERA ACTIVITY","LOADING....")
                     }
                     Status.FAILED -> {
-                        Log.d("SDK","FAILED")
                         startCamera()
                     }
                     Status.INVALID -> {
-                        Log.d("SDK","INVALID")
                         startCamera()
+                    }
+                    else -> {
+                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
+                        Log.d("CAMERA ACTIVITY","LOADING....")
                     }
                 }
 

@@ -19,8 +19,8 @@ class ApiConfig {
                     HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
                 }
             val client = OkHttpClient.Builder()
-                .readTimeout(120, TimeUnit.SECONDS)
-                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()

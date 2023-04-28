@@ -65,16 +65,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 val imgFile2 = File(newFile!!)
                 when(faceVerification.verifySync(imgFile1!!, imgFile2)){
                     Status.VALID -> {
-                        Log.d("SDK","VALID")
+                        Toast.makeText(this@MainActivity, "Valid", Toast.LENGTH_SHORT).show()
                     }
                     Status.LOADING -> {
-                        Log.d("SDK","LOADING")
+                        Toast.makeText(this@MainActivity, "Loading...", Toast.LENGTH_SHORT).show()
                     }
                     Status.FAILED -> {
-                        Log.d("SDK","FAILED")
+                        Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
                     }
                     Status.INVALID -> {
-                        Log.d("SDK","INVALID")
+                        Toast.makeText(this@MainActivity, "Invalid", Toast.LENGTH_SHORT).show()
                     }
                 }
 

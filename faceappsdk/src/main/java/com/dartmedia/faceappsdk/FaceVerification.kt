@@ -60,9 +60,10 @@ class FaceVerification {
     }
 
 
-    // Warning: Synchronous Call (handled with try-catch)
+    // Warning: Synchronous (handled with try-catch)
     fun verifySync(image1: File, image2: File): Status {
         isValid = Status.LOADING
+        Log.d("SDK SYNCHRONOUS", "$isValid" )
         val requestImageFile1 = image1.asRequestBody("image/*".toMediaTypeOrNull())
         val requestImageFile2 = image2.asRequestBody("image/*".toMediaTypeOrNull())
         val imageMultipart1: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -78,8 +79,9 @@ class FaceVerification {
         val service = ApiConfig.getApiService().verifyImage(imageMultipart1, imageMultipart2)
         try {
             val response = service.execute()
+            isValid = Status.LOADING
             if (response.isSuccessful) {
-                Log.d("SDK", "SYNC")
+                Log.d("SDK", "Synchronous Call ")
                 val responseBody = response.body()
                 val distance = responseBody?.result?.distance as Double
                 if (distance < 0.3) {
@@ -87,15 +89,15 @@ class FaceVerification {
                     Log.d("SDK", responseBody.result.toString())
                 } else {
                     isValid = Status.INVALID
-                    Log.d("SDK", "BEDA")
                 }
             } else {
-                isValid = Status.INVALID
-                Log.d("SDK", "INVALID")
+                isValid = Status.LOADING
             }
         } catch (e: Exception) {
             Log.d("SDK", "$e")
+            isValid = Status.FAILED
         }
+        Log.d("SDK SYNCHRONOUS", "$isValid" )
         return isValid
     }
 }
