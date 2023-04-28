@@ -13,14 +13,14 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
 
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/NeoRevolt/FaceApp")
-            credentials {
-                username = 'NeoRevolt'
-                password = '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'
-            }
-        }
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri("https://maven.pkg.github.com/NeoRevolt/FaceApp")
+//            credentials {
+//                username = 'NeoRevolt'
+//                password = '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'
+//            }
+//        }
     }
 }
 rootProject.name = "FaceApp"
