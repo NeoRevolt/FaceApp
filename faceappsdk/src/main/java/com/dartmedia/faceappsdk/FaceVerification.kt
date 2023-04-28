@@ -83,15 +83,16 @@ class FaceVerification {
             if (response.isSuccessful) {
                 Log.d("SDK", "Synchronous Call ")
                 val responseBody = response.body()
-                val distance = responseBody?.result?.distance as Double
-                if (distance < 0.3) {
+                val verified = responseBody?.result?.verified
+                if (verified == true) {
                     isValid = Status.VALID
-                    Log.d("SDK", responseBody.result.toString())
                 } else {
                     isValid = Status.INVALID
                 }
+                Log.d("SDK", "Distance : ${responseBody?.result?.distance}")
+
             } else {
-                isValid = Status.LOADING
+                isValid = Status.INVALID
             }
         } catch (e: Exception) {
             Log.d("SDK", "$e")
