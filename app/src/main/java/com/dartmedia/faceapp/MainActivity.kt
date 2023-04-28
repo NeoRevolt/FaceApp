@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun intentToGalleryImage() {
-        val intent = Intent(Intent.ACTION_PICK)
+        val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
         intent.type = "image/*"
         galleryResultLauncher.launch(intent)
     }

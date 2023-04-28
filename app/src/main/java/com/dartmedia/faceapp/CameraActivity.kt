@@ -102,7 +102,7 @@ class CameraActivity : AppCompatActivity() {
                 val matrix = Matrix()
                 matrix.postScale(-1f, 1f)
                 val rotatedImgBitmap = Bitmap.createBitmap(imgBitmap, 0, 0, imgBitmap.width, imgBitmap.height, matrix, true)
-
+//                if(BuildConfig.VERSION_CODE <)
                 //save normal image bitmap to file
                 val filePath = File(Utils.tempFileImage(this@CameraActivity, rotatedImgBitmap, filename))
                 val filePath2 = File(intent.getStringExtra("image1"))
@@ -110,14 +110,14 @@ class CameraActivity : AppCompatActivity() {
                     //Panggil API
                 when(faceVerification.verifySync(filePath, filePath2)){
                     Status.VALID -> {
-                        Toast.makeText(this@CameraActivity, "Valid", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@CameraActivity, "Valid", Toast.LENGTH_SHORT).show()
                         val intent = Intent()
                         intent.putExtra("path", filePath.absolutePath)
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
                     Status.LOADING -> {
-                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
                         Log.d("CAMERA ACTIVITY","LOADING....")
                     }
                     Status.FAILED -> {
@@ -127,7 +127,7 @@ class CameraActivity : AppCompatActivity() {
                         startCamera()
                     }
                     else -> {
-                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@CameraActivity, "Loading...", Toast.LENGTH_SHORT).show()
                         Log.d("CAMERA ACTIVITY","LOADING....")
                     }
                 }
