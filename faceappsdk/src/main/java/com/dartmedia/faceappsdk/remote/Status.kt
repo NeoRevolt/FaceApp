@@ -5,5 +5,8 @@ enum class Status {
     LOADING,
     FAILED,
     VALID,
-    INVALID
+    INVALID,
+    EXCEPTION,
+    SERVER_ERROR,
+    CLIENT_ERROR
 }
