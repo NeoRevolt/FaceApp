@@ -106,7 +106,10 @@ class CameraActivity : AppCompatActivity() {
                 //save normal image bitmap to file
                 val filePath = File(Utils.tempFileImage(this@CameraActivity, rotatedImgBitmap, filename))
                 val filePath2 = File(intent.getStringExtra("image1"))
-
+//                Log.d("SIZE 1", filePath.length().toString())
+//                Log.d("PATH 1", filePath.path)
+//                Log.d("SIZE 2", filePath2.length().toString())
+//                Log.d("PATH 2", filePath2.path)
                     //Panggil API
                 when(faceVerification.verifySync(filePath, filePath2)){
                     Status.VALID -> {

@@ -73,7 +73,7 @@ class FaceVerification {
         )
         val imageMultipart2: MultipartBody.Part = MultipartBody.Part.createFormData(
             "file2",
-            image1.name,
+            image2.name,
             requestImageFile2
         )
         val service = ApiConfig.getApiService().verifyImage(imageMultipart1, imageMultipart2)
