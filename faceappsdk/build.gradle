@@ -48,14 +48,14 @@ afterEvaluate {
 
                 groupId 'com.github.neorevolt'
                 artifactId 'face-sdk'
-                version '3.2.3'
+                version '3.2.4'
             }
             debug(MavenPublication) {
                 from components.debug
 
                 groupId 'com.github.neorevolt'
                 artifactId 'face-sdk'
-                version '3.2.3'
+                version '3.2.4'
             }
         }
 
